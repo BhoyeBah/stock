@@ -6,7 +6,7 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
-#/vendor/
+/vendor/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -15,6 +15,6 @@
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
-#/public/assets/
-#/assets/vendor/
+/public/assets/
+/assets/vendor/
 ###< symfony/asset-mapper ###
