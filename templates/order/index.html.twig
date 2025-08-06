@@ -1,0 +1,65 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}order index{% endblock %}
+
+{% block body %}
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Tables</h1>
+<p class="mb-4">
+    DataTables est un plugin tiers utilisé pour générer le tableau ci-dessous.
+    Pour plus d'informations, visitez la
+    <a target="_blank" href="https://datatables.net">documentation officielle de DataTables</a>.
+</p>
+
+<!-- DataTable Centré et Réduit -->
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow mb-4">
+
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Liste des factures</h6>
+                    <a href="{{ path('app_order_new') }}" class="btn btn-primary">Ajouter</a>
+                </div>
+                {% include 'partials/flash_messages.html.twig' %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>FACTURE N°</th>
+                                    <th>Date de commande</th>
+                                    <th>Montant payé</th>
+                                    <th>Montant restant</th>
+                                    <th>Prix Total</th>
+                                    <th>Solde</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.numero }}</td>
+                                    <td>{{ order.createdAt ? order.createdAt|date('d/m/Y') : '' }}</td>
+                                    <td>{{ order.montantPaye | number_format(0, '', ' ') }} GNF</td>
+                                    <td>{{ order.montantRestant | number_format(0, '', ' ') }} GNF</td>
+                                    <td>{{ order.montantTotal | number_format(0, '', ' ') }} GNF</td>
+                                    <td>{{ order.solde | number_format(0,'',' ') }}GNF</td>
+                                    <td>
+                                        <a href="{{ path('app_order_show', {id: order.id }) }}" class="btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="7">no records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

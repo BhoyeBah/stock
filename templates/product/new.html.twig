@@ -1,0 +1,22 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}New Product{% endblock %}
+
+{% block body %}
+<div class="page-inner">
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+
+                    <!-- En-tête du formulaire -->
+                    <div class="card-header">
+                        <h4 class="mb-0">Formulaire d'ajout d'un produit<a href="{{ path('app_product_index') }}" class="btn btn-primary">Liste des produits</a></h4>
+                    </div>
+                    {{ include('product/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

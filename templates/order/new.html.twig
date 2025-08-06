@@ -1,0 +1,93 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-center text-white">
+            <h4>Facture</h4>
+        </div>
+
+        <div class="card-body">
+            {{ form_start(form, { attr: { class: 'form' } }) }}
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        {{ form_widget(form.client, { attr: { class: 'form-control' } }) }}
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Montant Total Payé</span>
+                        <input type="number" class="form-control text-end" id="montantPaye" name="montantPaye" onchange="GetTotal()">
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Inv. No</span>
+                        <input type="text" class="form-control" placeholder="Inv. No" name="invoiceNumber">
+                        {# À intégrer dans l'entité si nécessaire #}
+                    </div>
+                </div>
+            </div>
+
+            {# Partie dynamique produits #}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix Unitaire</th>
+                        <th class="text-end">Quantité</th>
+                        <th class="text-end">Prix total</th>
+                        <th class="NoPrint">
+                            <button type="button" class="btn btn-success" onclick="BtnAdd()">+</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="TBody">
+                    <tr id="TRow" class="d-none">
+                        <td>
+                            <select name="products_id[]" class="form-control product_id" id="products_id[]">
+                                <option value="" disabled selected>Choisir un produit</option>
+                                {% for product in products %}
+                                    <option value="{{ product.id }}" data-price="{{ product.prixUnit }}">
+                                        {{ product.designation }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="number" class="form-control text-end" name="prixUnit[]" onchange="Calc(this);" readonly></td>
+                        <td><input type="number" class="form-control text-end" name="quantite[]" onchange="Calc(this);"></td>
+                        <td><input type="number" class="form-control text-end" name="prixTotal[]" value="0" readonly></td>
+                        <td class="NoPrint"><button type="button" class="btn btn-sm btn-danger" onclick="BtnDel(this)">X</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Montant Total</span>
+                        <input type="number" class="form-control text-end" id="montantTotal" name="montantTotal" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Montant Total Restant</span>
+                        <input type="number" class="form-control text-end" id="montantRestant" name="montantRestant" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Solde</span>
+                        <input type="number" class="form-control text-end" id="solde" name="solde" readonly>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mx-auto d-block">Enrégistré</button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

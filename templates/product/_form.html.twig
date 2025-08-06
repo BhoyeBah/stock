@@ -1,0 +1,63 @@
+<!-- Default Basic Forms Start -->
+{{ form_start(form, { attr: { class: 'container' } }) }}
+
+
+<!-- Corps du formulaire -->
+<div class="card-body">
+    <div class="row g-3">
+
+        <!-- Catégorie -->
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.category, 'Selectionnez la famille du produit') }}
+                {{ form_widget(form.category, { attr: { class: 'form-control' } }) }}
+                {{ form_errors(form.category) }}
+            </div>
+        </div>
+
+        <!-- designation du produit -->
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.designation, 'Designation du produit') }}
+                {{ form_widget(form.designation, { attr: { class: 'form-control', placeholder: 'Entrez la designation du produit' } }) }}
+                {{ form_errors(form.designation) }}
+            </div>
+        </div>
+
+        <!-- Prix -->
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.prixUnit, 'Prix') }}
+                {{ form_widget(form.prixUnit, { attr: { class: 'form-control', placeholder: 'Entrez le prix' } }) }}
+                {{ form_errors(form.prixUnit) }}
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.Couleur, 'Couleur du produit') }}
+                {{ form_widget(form.Couleur, { attr: { class: 'form-control', placeholder: 'Entrez la Couleur du produit' } }) }}
+                {{ form_errors(form.Couleur) }}
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.quantite, 'Quantité en stock') }}
+                {{ form_widget(form.quantite, { attr: { class: 'form-control', placeholder: 'Entrez la quantité en stock du produit' } }) }}
+                {{ form_errors(form.quantite) }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bouton de soumission -->
+<div class="card-action text-center mb-4">
+    <button type="submit" class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+</div>
+
+
+{{ form_end(form) }}

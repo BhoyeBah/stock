@@ -1,0 +1,56 @@
+<!-- Default Basic Forms Start -->
+{{ form_start(form, { attr: { class: 'container' } }) }}
+
+
+<!-- Corps du formulaire -->
+<div class="card-body">
+    <div class="row g-3">
+
+        <!-- Titre de l'article -->
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.nom, 'Nom du client') }}
+                {{ form_widget(form.nom, { attr: { class: 'form-control', placeholder: 'Entrez le nom du client' } }) }}
+                {{ form_errors(form.nom) }}
+            </div>
+        </div>
+
+        <!-- prenom -->
+        <div class="col-lg-12">
+            <div class="form-group">
+                {{ form_label(form.prenom, 'Prénom') }}
+                {{ form_widget(form.prenom, { attr: { class: 'form-control', rows: 5, placeholder: 'Entrez le prénom' } }) }}
+                {{ form_errors(form.prenom) }}
+            </div>
+        </div>
+
+        <!-- Champ de fichier image -->
+        <div class="col-lg-12 mt-4">
+            <div class="form-group">
+                {{ form_label(form.telephone, 'Téléphone') }}
+                {{ form_widget(form.telephone, { attr: { class: 'form-control', rows: 5, placeholder: 'Entrez le numéro du téléphone' } }) }}
+                {{ form_errors(form.telephone) }}
+            </div>
+        </div>
+
+        <!-- Champ de fichier image -->
+        <div class="col-lg-12 mt-4">
+            <div class="form-group">
+                {{ form_label(form.adresse, 'Adresse') }}
+                {{ form_widget(form.adresse, { attr: { class: 'form-control', rows: 5, placeholder: 'Entrez l\'adresse du client' } }) }}
+                {{ form_errors(form.adresse) }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bouton de soumission -->
+<div class="card-action text-center mb-4">
+    <button type="submit" class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+</div>
+
+
+{{ form_end(form) }}

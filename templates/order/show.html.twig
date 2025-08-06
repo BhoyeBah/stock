@@ -1,0 +1,107 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Détails de la order{% endblock %}
+
+{% block body %}
+<div class="card">
+    <h5 class="card-header">
+        Numéro de la order {{ order.numero }}
+    </h5>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <p><strong>Date de order :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <p><strong>Nom et Prénom :</strong> {{ order.client.nom }} {{ order.client.prenom }}</p>
+                </div>
+                <div class="mb-3">
+                    <p><strong>Téléphone :</strong> {{ order.client.telephone }}</p>
+                </div>
+                <div class="mb-3">
+                    <p><strong>Adresse :</strong> {{ order.client.adresse }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold">Détails des Articles</h5>
+
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Famille</th>
+                        <th>Designation</th>
+                        <th>Couleur</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in order.orderDetails %}
+                    <tr>
+                        <td>{{ detail.product.id }}</td>
+                        <td>{{ detail.product.category.nom }}</td>
+                        <td>{{ detail.product.designation }}</td>
+                        <td>{{ detail.product.couleur }}</td>
+                        <td>{{ detail.quantite }}</td>
+                        <td>{{ detail.prixUnit|number_format(0, ',', ' ') }} GNF</td>
+                        <td>{{ detail.prixTotal|number_format(0, ',', ' ') }} GNF</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Aucun détail de order trouvé</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bloc Totaux Final -->
+        <div class="row justify-content-end mb-4">
+            <div class="col-md-4">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Montant Total</th>
+                        <td>{{ order.montantTotal|number_format(0, ',', ' ') }} GNF</td>
+                    </tr>
+                    <tr>
+                        <th>Montant Total Payé</th>
+                        <td>{{ order.montantPaye|number_format(0, ',', ' ') }} GNF</td>
+                    </tr>
+                    <tr>
+                        <th>Montant Total Restant</th>
+                        <td>{{ (order.montantTotal - order.montantPaye)|number_format(0, ',', ' ') }} GNF</td>
+                    </tr>
+                    <tr>
+                        <th>Solde</th>
+                        <td>{{ order.solde|number_format(0, ',', ' ') }} GNF</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="row mt-4">
+            <div class="col-md-8"></div>
+            <div class="col-md-4 d-flex justify-content-end gap-2">
+                <a href="{{ path('app_order') }}" class="btn rounded-pill btn-warning mr-3">
+                    <i class="fas fa-subdirectory-left"></i>
+                    Retour
+                </a>
+                <a id="print" onclick="load('print')"href="{{ path('app_order_print', { 'order': order.id }) }}"
+                    class="btn rounded-pill btn-primary">
+                    <i class="fas fa-printer"></i>
+                    Imprimer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

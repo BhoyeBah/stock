@@ -1,0 +1,23 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Edit Client{% endblock %}
+
+{% block body %}
+<div class="page-inner">
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+
+                    <!-- En-tête du formulaire -->
+                    <div class="card-header">
+                        <h4 class="mb-0">Formulaire de modification<a href="{{ path('app_client_index') }}" class="btn btn-primary">Liste des clients</a></h4>
+                    </div>
+
+                    {{ include('client/_form.html.twig', {'button_label': 'Modifier'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

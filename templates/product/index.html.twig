@@ -1,0 +1,66 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Liste des produits{% endblock %}
+
+
+{% block body %}
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Tables</h1>
+<p class="mb-4">
+    DataTables est un plugin tiers utilisé pour générer le tableau ci-dessous.
+    Pour plus d'informations, visitez la
+    <a target="_blank" href="https://datatables.net">documentation officielle de DataTables</a>.
+</p>
+
+<!-- DataTable Centré et Réduit -->
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-12">
+            <div class="card shadow mb-4">
+
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Liste des produits</h6>
+                    <a href="{{ path('app_product_new') }}" class="btn btn-primary">Ajouter</a>
+                </div>
+                {% include 'partials/flash_messages.html.twig' %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>Famille</th>
+                                    <th>Couleur</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité Stock</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.designation }}</td>
+                                    <td>{{ product.category.nom }}</td>
+                                    <td>{{ product.Couleur }}</td>
+                                    <td>{{ product.prixUnit|number_format(0, '.', ' ') }} FGN</td>
+                                    <td>{{ product.quantite }}</td>
+                                    <td>
+                                        <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-sm btn-success"><i class="fas fa-eye"></i></a>
+                                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                        {% include("product/_delete_form.html.twig") %}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5">no records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
