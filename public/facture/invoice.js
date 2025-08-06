@@ -36,7 +36,8 @@ $(document).ready(function () {
     });
 
     // Nettoyage des lignes vides avant soumission
-    $('form').on('submit', function (e) {
+    $('#form-facture').on('submit', function (e) {
+
         // Supprimer la ligne modèle (#TRow)
         $('#TRow').remove();
 

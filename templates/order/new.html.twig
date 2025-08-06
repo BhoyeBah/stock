@@ -8,7 +8,8 @@
         </div>
 
         <div class="card-body">
-            {{ form_start(form, { attr: { class: 'form' } }) }}
+            {{ form_start(form, { attr: { class: 'form', id: 'form-facture' } }) }}
+
 
             <div class="row">
                 <div class="col-4">
@@ -52,9 +53,9 @@
                             <select name="products_id[]" class="form-control product_id" id="products_id[]">
                                 <option value="" disabled selected>Choisir un produit</option>
                                 {% for product in products %}
-                                    <option value="{{ product.id }}" data-price="{{ product.prixUnit }}">
-                                        {{ product.designation }}
-                                    </option>
+                                <option value="{{ product.id }}" data-price="{{ product.prixUnit }}">
+                                    {{ product.designation }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </td>
