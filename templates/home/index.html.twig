@@ -52,38 +52,38 @@
         </div>
     </div>
 
-   <!-- Commandes non payées -->
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-danger shadow h-100 py-2">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Commandes Non Payées</div>
-                    <div class="row no-gutters align-items-center">
-                        <div class="col-auto">
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                {{ nbreOrderNonPaye }}
+    <!-- Commandes non payées -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Commandes Non Payées</div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                    {{ nbreOrderNonPaye }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="progress progress-sm mr-2">
-                                <div class="progress-bar bg-danger" role="progressbar"
-                                     style="width: {{ pourcentageOrderNonPaye }}%"
-                                     aria-valuenow="{{ pourcentageOrderNonPaye }}"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100">
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                        style="width: {{ pourcentageOrderNonPaye }}%"
+                                        aria-valuenow="{{ pourcentageOrderNonPaye }}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                    <div class="col-auto">
+                        <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
     <!-- Montant non payé -->
@@ -248,64 +248,67 @@
     </div>
 
 </div>
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Chiffre d'affaires mensuel
-    const caCtx = document.getElementById("chiffreAffaireChart").getContext("2d");
-    new Chart(caCtx, {
-        type: 'line',
-        data: {
-            labels: ['Janv', 'Fév', 'Mars', 'Avril', 'Mai', 'Juin'],
-            datasets: [{
-                label: 'Chiffre d’affaires (GNF)',
-                data: [2000000, 2500000, 1800000, 3000000, 2700000, 3500000],
-                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
+document.addEventListener('DOMContentLoaded', () => {
+    // Chiffre d'affaires
+    const caCanvas = document.getElementById("chiffreAffaireChart");
+    if (caCanvas) {
+        const caCtx = caCanvas.getContext("2d");
+        const caLabels = {{ caLabels|json_encode|raw }};
+        const caData = {{ caMontants|json_encode|raw }};
+        new Chart(caCtx, {
+            type: 'line',
+            data: {
+                labels: caLabels,
+                datasets: [{
+                    label: 'Chiffre d’affaires (GNF)',
+                    data: caData,
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: value => value.toLocaleString('fr-FR') + ' GNF'
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => value.toLocaleString('fr-FR') + ' GNF'
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 
     // Répartition du stock
-    const stockCtx = document.getElementById("stockPieChart").getContext("2d");
-    new Chart(stockCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ["En stock", "Faible", "Épuisé"],
-            datasets: [{
-                data: [65, 20, 15],
-                backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
-                hoverBackgroundColor: ['#17a673', '#dda20a', '#be2617'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
+    const stockCanvas = document.getElementById("stockPieChart");
+    if (stockCanvas) {
+        const stockCtx = stockCanvas.getContext("2d");
+        new Chart(stockCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ["En stock", "Faible", "Épuisé"],
+                datasets: [{
+                    data: [65, 20, 15],
+                    backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+                    hoverBackgroundColor: ['#17a673', '#dda20a', '#be2617'],
+                    borderWidth: 1
+                }]
             },
-            cutout: '70%'
-        }
-    });
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                cutout: '70%'
+            }
+        });
+    }
+});
 </script>
 
 {% endblock %}

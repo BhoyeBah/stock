@@ -42,24 +42,23 @@ class OrderRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getMontantPaye(): int
-    {
-        return (int) $this->createQueryBuilder('o')
-            ->select('COALESCE(SUM(o.montantPaye), 0)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
 
     public function getMontantNonPaye(): int
     {
-        return $this->getMontantTotal() - $this->getMontantPaye();
+        $qb = $this->createQueryBuilder('o')
+            ->select('COALESCE(SUM(o.montantRestant),0)')
+            ->where('o.status = :status')
+            ->setParameter('status', 'non payé');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function countPaid(): int
     {
         return (int) $this->createQueryBuilder('o')
             ->select('COUNT(o.id)')
-            ->where('o.montantPaye = o.montantTotal')
+            ->where('o.status = :status')
+            ->setParameter('status', 'payé')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -68,10 +67,12 @@ class OrderRepository extends ServiceEntityRepository
     {
         return (int) $this->createQueryBuilder('o')
             ->select('COUNT(o.id)')
-            ->where('o.montantPaye < o.montantTotal')
+            ->where('o.status = :status')
+            ->setParameter('status', 'non payé')
             ->getQuery()
             ->getSingleScalarResult();
     }
+
     //    /**
     //     * @return Order[] Returns an array of Order objects
     //     */

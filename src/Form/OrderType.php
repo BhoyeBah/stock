@@ -21,11 +21,10 @@ class OrderType extends AbstractType
                 'placeholder' => 'Sélectionnez un client',
                 'attr' => ['class' => 'form-control'],
                 'choice_label' => function ($client) {
-                    return $client->getPrenom() . ' ' . $client->getNom();
+                    return $client->getPrenom() . ' ' . $client->getNom() . ' (' . $client->getTelephone() . ')';
                 },
                 'required' => true,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -12,24 +12,16 @@
 
 
             <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                     <div class="input-group mb-3">
-                        {{ form_widget(form.client, { attr: { class: 'form-control' } }) }}
+                        {{ form_widget(form.client, { attr: { class: 'form-control searchselect' } }) }}
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-6">
                     <div class="input-group mb-3">
-                        <span class="input-group-text">Montant Total Payé</span>
+                        <span class="input-group-text">Montant Réçu</span>
                         <input type="number" class="form-control text-end" id="montantPaye" name="montantPaye" onchange="GetTotal()">
-                    </div>
-                </div>
-
-                <div class="col-4">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Inv. No</span>
-                        <input type="text" class="form-control" placeholder="Inv. No" name="invoiceNumber">
-                        {# À intégrer dans l'entité si nécessaire #}
                     </div>
                 </div>
             </div>
@@ -50,7 +42,7 @@
                 <tbody id="TBody">
                     <tr id="TRow" class="d-none">
                         <td>
-                            <select name="products_id[]" class="form-control product_id" id="products_id[]">
+                            <select name="products_id[]" class="form-control product_id select2-fullwidth" id="products_id[]">
                                 <option value="" disabled selected>Choisir un produit</option>
                                 {% for product in products %}
                                 <option value="{{ product.id }}" data-price="{{ product.prixUnit }}">

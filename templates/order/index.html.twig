@@ -29,10 +29,11 @@
                                 <tr>
                                     <th>FACTURE N°</th>
                                     <th>Date de commande</th>
-                                    <th>Montant payé</th>
-                                    <th>Montant restant</th>
                                     <th>Prix Total</th>
+                                    <th>Montant restant</th>
+                                    <th>Montant Réçu</th>
                                     <th>Solde</th>
+                                    <th>Status</th>
                                     <th>actions</th>
                                 </tr>
                             </thead>
@@ -41,12 +42,38 @@
                                 <tr>
                                     <td>{{ order.numero }}</td>
                                     <td>{{ order.createdAt ? order.createdAt|date('d/m/Y') : '' }}</td>
-                                    <td>{{ order.montantPaye | number_format(0, '', ' ') }} GNF</td>
-                                    <td>{{ order.montantRestant | number_format(0, '', ' ') }} GNF</td>
                                     <td>{{ order.montantTotal | number_format(0, '', ' ') }} GNF</td>
-                                    <td>{{ order.solde | number_format(0,'',' ') }}GNF</td>
+                                    <td>{{ order.montantRestant | number_format(0, '', ' ') }} GNF</td>
+                                    <td>
+                                        {% set totalRecu = 0 %}
+                                        {% for paiement in order.paiements %}
+                                        {% set totalRecu = totalRecu + paiement.montant %}
+                                        {% endfor %}
+                                        {{ totalRecu|number_format(2, ',', ' ')}} GNF
+                                    </td>
+                                    <td>{{ order.solde | number_format(0,'',' ') }} GNF</td>
+                                    <td class="text-white">
+
+                                        {% if order.status == 'payé' %}
+                                        <span class="badge bg-success">Payé</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Non payé</span>
+                                        {% endif %}
+
+                                    </td>
                                     <td>
                                         <a href="{{ path('app_order_show', {id: order.id }) }}" class="btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                        {% if order.status == "non payé" %}
+                                        <button type="button"
+                                            class="btn btn-primary btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#paiementModal"
+                                            data-id="{{ order.id }}"
+                                            data-amount="{{ order.montantRestant }}">
+                                            Payé
+                                        </button>
+                                        {% endif %}
+
                                     </td>
                                 </tr>
                                 {% else %}
@@ -62,4 +89,50 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Paiement -->
+<div class="modal fade" id="paiementModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Paiement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="{{ path('app_order_payer') }}" id="paymentForm" method="post">
+                <input type="hidden" id="commandeId" name="commandeId" value="">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Montant à payer</label>
+                        <input type="text" id="amount" name="amount" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Montant reçu</label>
+                        <input type="number" name="paymentAmount" class="form-control" id="paymentAmount" placeholder="Ex: 10 000 GNF" step="0.01" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Fermer
+                    </button>
+                    <button type="submit" class="btn btn-primary">Payer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script pour remplir le modal avec les infos -->
+<script>
+    var paiementModal = document.getElementById('paiementModal');
+    paiementModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+        var orderId = button.getAttribute('data-id');
+        var amount = button.getAttribute('data-amount');
+
+        document.getElementById('commandeId').value = orderId;
+        document.getElementById('amount').value = amount + " GNF";
+    });
+</script>
+
 {% endblock %}

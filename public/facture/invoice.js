@@ -1,5 +1,7 @@
 
 $(document).ready(function () {
+
+    $('.searchselect').select2();
     // Facultatif : ajouter une première ligne automatiquement
     // BtnAdd();
 
@@ -92,9 +94,14 @@ function BtnAdd() {
     $newRow.find("input, select").val('');
     $newRow.find('select[name="products_id[]"]').prop('required', true);
 
+    // Initialiser Select2 uniquement sur le nouveau select
+    $newRow.find('select[name="products_id[]"]').select2({
+        width: '100%'
+    });
+
     updateProductOptions();
 
-    // Re-numérotation (si besoin)
+    // Re-numérotation
     $("#TBody").find("tr:visible").each(function (index) {
         $(this).find("th").first().html(index);
     });

@@ -26,9 +26,6 @@ class Order
     private ?int $montantTotal = null;
 
     #[ORM\Column]
-    private ?int $montantPaye = null;
-
-    #[ORM\Column]
     private ?int $montantRestant = null;
 
     #[ORM\Column]
@@ -46,9 +43,19 @@ class Order
     #[ORM\OneToMany(targetEntity: OrderDetail::class, mappedBy: 'orders')]
     private Collection $orderDetails;
 
+    /**
+     * @var Collection<int, Paiement>
+     */
+    #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'commande')]
+    private Collection $paiements;
+
+    #[ORM\Column(type: 'string', length: 50, options: ["default" => "non payé"])]
+    private ?string $status = 'non payé';
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
+        $this->paiements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,18 +95,6 @@ class Order
     public function setMontantTotal(int $montantTotal): static
     {
         $this->montantTotal = $montantTotal;
-
-        return $this;
-    }
-
-    public function getMontantPaye(): ?int
-    {
-        return $this->montantPaye;
-    }
-
-    public function setMontantPaye(int $montantPaye): static
-    {
-        $this->montantPaye = $montantPaye;
 
         return $this;
     }
@@ -178,6 +173,48 @@ class Order
                 $orderDetail->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Paiement>
+     */
+    public function getPaiements(): Collection
+    {
+        return $this->paiements;
+    }
+
+    public function addPaiement(Paiement $paiement): static
+    {
+        if (!$this->paiements->contains($paiement)) {
+            $this->paiements->add($paiement);
+            $paiement->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaiement(Paiement $paiement): static
+    {
+        if ($this->paiements->removeElement($paiement)) {
+            // set the owning side to null (unless already changed)
+            if ($paiement->getCommande() === $this) {
+                $paiement->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
